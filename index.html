@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <title>Yurii & Olena</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #071b15;
+    }
+
+    .screen {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+    }
+
+    /* Первое фото, которое появится после видео */
+    #firstPhoto {
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: scale(1.03);
+      background: #f4efe7;
+      transition:
+        opacity 1.5s ease,
+        transform 1.5s ease;
+    }
+
+    #firstPhoto.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    #firstPhoto img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    /* Экран с видео */
+    #videoScreen {
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #071b15;
+      opacity: 1;
+      filter: blur(0);
+      transform: scale(1);
+      transition:
+        opacity 1.4s ease,
+        filter 1.4s ease,
+        transform 1.4s ease;
+    }
+
+    #videoScreen.disappear {
+      pointer-events: none;
+      opacity: 0;
+      filter: blur(12px);
+      transform: scale(1.04);
+    }
+
+    #backgroundVideo {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    /* Затемнение под кнопкой */
+    .shadow {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(
+        to bottom,
+        transparent 55%,
+        rgba(4, 20, 15, 0.65) 100%
+      );
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    #videoScreen.finished .shadow {
+      opacity: 1;
+    }
+
+    /* Кнопка после окончания видео */
+    #openButton {
+      position: absolute;
+      left: 50%;
+      bottom: max(40px, calc(env(safe-area-inset-bottom) + 22px));
+      z-index: 3;
+
+      min-width: min(82vw, 330px);
+      min-height: 52px;
+      padding: 13px 24px;
+
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 50px;
+
+      color: #fffaf0;
+      background: rgba(7, 27, 21, 0.65);
+
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 17px;
+      letter-spacing: 0.04em;
+
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+
+      cursor: pointer;
+      opacity: 0;
+      transform: translateX(-50%) translateY(15px);
+      transition:
+        opacity 0.8s ease,
+        transform 0.8s ease;
+    }
+
+    #openButton.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    #openButton[hidden] {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Первое фото -->
+  <section id="firstPhoto" class="screen">
+    <img src="Foto1.jpg" alt="Yurii та Olena">
+  </section>
+
+  <!-- Вступительное видео -->
+  <section id="videoScreen" class="screen">
+
+    <video
+      id="backgroundVideo"
+      autoplay
+      muted
+      playsinline
+      preload="auto"
+    >
+      <source src="Fon.MOV" type="video/quicktime">
+    </video>
+
+    <div class="shadow"></div>
+
+    <button id="openButton" type="button" hidden>
+      Відкрити запрошення
+    </button>
+
+  </section>
+
+  <script>
+    const video = document.getElementById("backgroundVideo");
+    const videoScreen = document.getElementById("videoScreen");
+    const firstPhoto = document.getElementById("firstPhoto");
+    const openButton = document.getElementById("openButton");
+
+    let screenMode = "video";
+
+    // Видео всегда без звука
+    video.muted = true;
+    video.defaultMuted = true;
+    video.volume = 0;
+
+    // Когда видео закончилось
+    video.addEventListener("ended", function () {
+      screenMode = "finished";
+
+      videoScreen.classList.add("finished");
+
+      openButton.textContent = "Відкрити запрошення";
+      openButton.hidden = false;
+
+      requestAnimationFrame(function () {
+        openButton.classList.add("show");
+      });
+    });
+
+    // Открытие первого фото
+    function openInvitation() {
+      if (screenMode !== "finished") {
+        return;
+      }
+
+      screenMode = "opening";
+
+      openButton.classList.remove("show");
+      firstPhoto.classList.add("show");
+      videoScreen.classList.add("disappear");
+
+      setTimeout(function () {
+        videoScreen.style.display = "none";
+      }, 1500);
+    }
+
+    // Можно нажать на кнопку
+    openButton.addEventListener("click", function (event) {
+      event.stopPropagation();
+      openInvitation();
+    });
+
+    // Или нажать в любое место экрана после видео
+    videoScreen.addEventListener("click", openInvitation);
+
+    // Запуск видео на телефоне
+    window.addEventListener("load", function () {
+      video.play().catch(function () {
+        screenMode = "start";
+
+        openButton.textContent = "Запустити відео";
+        openButton.hidden = false;
+        openButton.classList.add("show");
+
+        openButton.onclick = function (event) {
+          event.stopPropagation();
+
+          video.play().then(function () {
+            screenMode = "video";
+            openButton.classList.remove("show");
+
+            setTimeout(function () {
+              openButton.hidden = true;
+            }, 800);
+          });
+        };
+      });
+    });
+  </script>
+
+</body>
+</html>
