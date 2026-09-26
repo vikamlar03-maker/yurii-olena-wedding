@@ -2,6 +2,7 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
+
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1, viewport-fit=cover"
@@ -14,64 +15,117 @@
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     html,
     body {
       width: 100%;
-      height: 100%;
+      min-height: 100%;
       margin: 0;
+      background: #f4efe7;
+    }
+
+    body {
       overflow: hidden;
-      background: #071b15;
+      font-family: Georgia, "Times New Roman", serif;
     }
 
-    .screen {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100vh;
-      height: 100dvh;
+    body.site-open {
+      overflow-x: hidden;
+      overflow-y: auto;
     }
 
-    /* Первое фото, которое появится после видео */
-    #firstPhoto {
+    button {
+      font: inherit;
+    }
+
+    /* =========================
+       ФОТОГРАФИИ
+    ========================= */
+
+    #gallery {
+      position: relative;
       z-index: 1;
+      width: 100%;
+      opacity: 0;
+      background: #f4efe7;
+      transition: opacity 1.5s ease;
+    }
+
+    #gallery.show {
+      opacity: 1;
+    }
+
+    .photo-section {
       display: flex;
       align-items: center;
       justify-content: center;
-      opacity: 0;
-      transform: scale(1.03);
-      background: #f4efe7;
-      transition:
-        opacity 1.5s ease,
-        transform 1.5s ease;
-    }
 
-    #firstPhoto.show {
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    #firstPhoto img {
       width: 100%;
-      height: 100%;
+      min-height: 100vh;
+      min-height: 100svh;
+
+      overflow: hidden;
+      background: #f4efe7;
+    }
+
+    .photo-section img {
       display: block;
+
+      width: 100%;
+      height: auto;
+      max-height: 100vh;
+      max-height: 100svh;
+
       object-fit: contain;
       object-position: center;
-    }
 
-    /* Экран с видео */
-    #videoScreen {
-      z-index: 2;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #071b15;
-      opacity: 1;
-      filter: blur(0);
-      transform: scale(1);
+      opacity: 0;
+      filter: blur(8px);
+      transform: translateY(55px) scale(0.98);
+
       transition:
         opacity 1.4s ease,
         filter 1.4s ease,
-        transform 1.4s ease;
+        transform 1.6s cubic-bezier(0.22, 0.8, 0.24, 1);
+    }
+
+    .photo-section.visible img {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0) scale(1);
+    }
+
+    /* =========================
+       НАЧАЛЬНОЕ ВИДЕО
+    ========================= */
+
+    #videoScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+
+      overflow: hidden;
+      background: #071b15;
+
+      opacity: 1;
+      filter: blur(0);
+      transform: scale(1);
+
+      transition:
+        opacity 1.4s ease,
+        filter 1.4s ease,
+        transform 1.5s ease;
     }
 
     #videoScreen.disappear {
@@ -84,58 +138,70 @@
     #backgroundVideo {
       position: absolute;
       inset: 0;
+
       width: 100%;
       height: 100%;
+
       object-fit: cover;
       object-position: center;
     }
 
-    /* Затемнение под кнопкой */
-    .shadow {
+    .video-shadow {
       position: absolute;
       inset: 0;
+
       pointer-events: none;
+      opacity: 0;
+
       background: linear-gradient(
         to bottom,
-        transparent 55%,
-        rgba(4, 20, 15, 0.65) 100%
+        transparent 50%,
+        rgba(3, 18, 13, 0.7) 100%
       );
-      opacity: 0;
+
       transition: opacity 0.8s ease;
     }
 
-    #videoScreen.finished .shadow {
+    #videoScreen.finished .video-shadow {
       opacity: 1;
     }
 
-    /* Кнопка после окончания видео */
+    /* =========================
+       КНОПКА ОТКРЫТИЯ
+    ========================= */
+
     #openButton {
       position: absolute;
       left: 50%;
-      bottom: max(40px, calc(env(safe-area-inset-bottom) + 22px));
-      z-index: 3;
+      bottom: max(
+        42px,
+        calc(env(safe-area-inset-bottom) + 24px)
+      );
+      z-index: 12;
 
       min-width: min(82vw, 330px);
-      min-height: 52px;
-      padding: 13px 24px;
+      min-height: 54px;
+      padding: 13px 25px;
 
-      border: 1px solid rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(255, 250, 240, 0.75);
       border-radius: 50px;
 
       color: #fffaf0;
       background: rgba(7, 27, 21, 0.65);
 
-      font-family: Georgia, "Times New Roman", serif;
       font-size: 17px;
       letter-spacing: 0.04em;
 
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.32);
+
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
 
       cursor: pointer;
+
       opacity: 0;
-      transform: translateX(-50%) translateY(15px);
+      transform: translateX(-50%) translateY(18px);
+
       transition:
         opacity 0.8s ease,
         transform 0.8s ease;
@@ -149,18 +215,120 @@
     #openButton[hidden] {
       display: none;
     }
+
+    /* =========================
+       КНОПКА МУЗЫКИ
+    ========================= */
+
+    #musicButton {
+      position: fixed;
+      right: max(
+        18px,
+        env(safe-area-inset-right)
+      );
+      bottom: max(
+        20px,
+        calc(env(safe-area-inset-bottom) + 12px)
+      );
+      z-index: 20;
+
+      width: 52px;
+      height: 52px;
+
+      border: 1px solid rgba(255, 250, 240, 0.65);
+      border-radius: 50%;
+
+      color: #fffaf0;
+      background: rgba(7, 27, 21, 0.7);
+
+      font-size: 25px;
+
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+
+      cursor: pointer;
+
+      opacity: 0;
+      transform: scale(0.7);
+
+      transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
+    }
+
+    #musicButton.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    #musicButton[hidden] {
+      display: none;
+    }
+
+    #musicButton.playing {
+      animation: music-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes music-pulse {
+      0%,
+      100% {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      50% {
+        box-shadow:
+          0 10px 35px rgba(0, 0, 0, 0.35),
+          0 0 0 8px rgba(203, 185, 135, 0.12);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #gallery,
+      #videoScreen,
+      .photo-section img,
+      #openButton,
+      #musicButton {
+        transition-duration: 0.01ms;
+        animation: none;
+      }
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- Первое фото -->
-  <section id="firstPhoto" class="screen">
-    <img src="Foto1.PNG" alt="Yurii та Olena">
-  </section>
+  <!-- Фотографии сайта -->
+  <main id="gallery" aria-hidden="true">
 
-  <!-- Вступительное видео -->
-  <section id="videoScreen" class="screen">
+    <section class="photo-section visible">
+      <img
+        src="Foto1.PNG"
+        alt="Yurii та Olena — перша фотографія"
+      >
+    </section>
+
+    <section class="photo-section">
+      <img
+        src="Foto2.PNG"
+        alt="Yurii та Olena — друга фотографія"
+        loading="lazy"
+      >
+    </section>
+
+    <section class="photo-section">
+      <img
+        src="Foto3.PNG"
+        alt="Yurii та Olena — третя фотографія"
+        loading="lazy"
+      >
+    </section>
+
+  </main>
+
+  <!-- Начальный экран с видео -->
+  <section id="videoScreen">
 
     <video
       id="backgroundVideo"
@@ -172,7 +340,7 @@
       <source src="Fon.MOV" type="video/quicktime">
     </video>
 
-    <div class="shadow"></div>
+    <div class="video-shadow"></div>
 
     <button id="openButton" type="button" hidden>
       Відкрити запрошення
@@ -180,20 +348,41 @@
 
   </section>
 
+  <!-- Фоновая музыка -->
+  <audio id="backgroundMusic" loop preload="auto">
+    <source src="Музыка .mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Включение и выключение музыки -->
+  <button
+    id="musicButton"
+    type="button"
+    aria-label="Вимкнути музику"
+    hidden
+  >
+    ♫
+  </button>
+
   <script>
     const video = document.getElementById("backgroundVideo");
     const videoScreen = document.getElementById("videoScreen");
-    const firstPhoto = document.getElementById("firstPhoto");
     const openButton = document.getElementById("openButton");
 
-    let screenMode = "video";
+    const gallery = document.getElementById("gallery");
+    const photoSections = document.querySelectorAll(".photo-section");
 
-    // Видео всегда без звука
+    const music = document.getElementById("backgroundMusic");
+    const musicButton = document.getElementById("musicButton");
+
+    let screenMode = "video";
+    let musicFadeTimer;
+
+    /* Видео всегда без звука */
     video.muted = true;
     video.defaultMuted = true;
     video.volume = 0;
 
-    // Когда видео закончилось
+    /* Когда видео закончилось */
     video.addEventListener("ended", function () {
       screenMode = "finished";
 
@@ -207,7 +396,41 @@
       });
     });
 
-    // Открытие первого фото
+    /* Плавное включение музыки */
+    function startMusic() {
+      clearInterval(musicFadeTimer);
+
+      music.volume = 0;
+
+      music.play().then(function () {
+        musicButton.hidden = false;
+        musicButton.classList.add("show", "playing");
+        musicButton.textContent = "♫";
+        musicButton.setAttribute(
+          "aria-label",
+          "Вимкнути музику"
+        );
+
+        let volume = 0;
+
+        musicFadeTimer = setInterval(function () {
+          volume += 0.05;
+
+          music.volume = Math.min(volume, 0.65);
+
+          if (volume >= 0.65) {
+            clearInterval(musicFadeTimer);
+          }
+        }, 120);
+      }).catch(function () {
+        /* Если музыка не включилась,
+           её можно запустить кнопкой ♫ */
+        musicButton.hidden = false;
+        musicButton.classList.add("show");
+      });
+    }
+
+    /* Открытие приглашения */
     function openInvitation() {
       if (screenMode !== "finished") {
         return;
@@ -216,24 +439,55 @@
       screenMode = "opening";
 
       openButton.classList.remove("show");
-      firstPhoto.classList.add("show");
+
+      document.body.classList.add("site-open");
+
+      gallery.setAttribute("aria-hidden", "false");
+      gallery.classList.add("show");
+
       videoScreen.classList.add("disappear");
+
+      startMusic();
+
+      window.scrollTo({
+        top: 0,
+        behavior: "instant"
+      });
 
       setTimeout(function () {
         videoScreen.style.display = "none";
       }, 1500);
     }
 
-    // Можно нажать на кнопку
+    /* Нажатие на кнопку открытия */
     openButton.addEventListener("click", function (event) {
       event.stopPropagation();
+
+      if (screenMode === "start") {
+        video.play().then(function () {
+          screenMode = "video";
+          openButton.classList.remove("show");
+
+          setTimeout(function () {
+            openButton.hidden = true;
+          }, 700);
+        });
+
+        return;
+      }
+
       openInvitation();
     });
 
-    // Или нажать в любое место экрана после видео
-    videoScreen.addEventListener("click", openInvitation);
+    /* После окончания видео можно нажать
+       в любое место экрана */
+    videoScreen.addEventListener("click", function () {
+      if (screenMode === "finished") {
+        openInvitation();
+      }
+    });
 
-    // Запуск видео на телефоне
+    /* Если телефон не разрешил автозапуск */
     window.addEventListener("load", function () {
       video.play().catch(function () {
         screenMode = "start";
@@ -241,20 +495,48 @@
         openButton.textContent = "Запустити відео";
         openButton.hidden = false;
         openButton.classList.add("show");
-
-        openButton.onclick = function (event) {
-          event.stopPropagation();
-
-          video.play().then(function () {
-            screenMode = "video";
-            openButton.classList.remove("show");
-
-            setTimeout(function () {
-              openButton.hidden = true;
-            }, 800);
-          });
-        };
       });
+    });
+
+    /* Включение и выключение музыки */
+    musicButton.addEventListener("click", function () {
+      if (music.paused) {
+        music.play();
+
+        musicButton.textContent = "♫";
+        musicButton.classList.add("playing");
+        musicButton.setAttribute(
+          "aria-label",
+          "Вимкнути музику"
+        );
+      } else {
+        music.pause();
+
+        musicButton.textContent = "♪";
+        musicButton.classList.remove("playing");
+        musicButton.setAttribute(
+          "aria-label",
+          "Увімкнути музику"
+        );
+      }
+    });
+
+    /* Анимация фотографий во время прокрутки */
+    const photoObserver = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      {
+        threshold: 0.2
+      }
+    );
+
+    photoSections.forEach(function (section) {
+      photoObserver.observe(section);
     });
   </script>
 
