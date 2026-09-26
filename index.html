@@ -306,6 +306,46 @@
         animation: none;
       }
     }
+    /* Фотографии соединяются без зазоров */
+.photo-section {
+  display: block;
+  width: 100%;
+  min-height: 0;
+  margin: -1px 0 0;
+  padding: 0;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.photo-section:first-child {
+  margin-top: 0;
+}
+
+.photo-section img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: none;
+  margin: 0;
+  vertical-align: top;
+}
+
+/* Foto4 не выезжает отдельным листом,
+   а цельно раскрывается справа */
+.photo-section.from-right img {
+  opacity: 1;
+  filter: none;
+  transform: none;
+  clip-path: inset(0 0 0 100%);
+  transition: clip-path 1.2s cubic-bezier(0.22, 0.8, 0.24, 1);
+}
+
+.photo-section.from-right.visible img {
+  opacity: 1;
+  filter: none;
+  transform: none;
+  clip-path: inset(0 0 0 0);
+}
   </style>
 </head>
 
