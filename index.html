@@ -346,6 +346,113 @@
   transform: none;
   clip-path: inset(0 0 0 0);
 }
+/* Расписание свадебного дня */
+.timeline-section {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-height: 0;
+  margin: -1px 0 0;
+  padding: 0;
+  overflow: hidden;
+  line-height: normal;
+}
+
+/* Сама фотография остаётся неподвижной */
+.timeline-section .timeline-background {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  opacity: 1 !important;
+  filter: none !important;
+  transform: none !important;
+  clip-path: none !important;
+  transition: none !important;
+}
+
+/* Общий вид надписей */
+.timeline-event {
+  position: absolute;
+  z-index: 5;
+  text-align: center;
+  color: #504f2c;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity 1.1s ease,
+    transform 1.1s cubic-bezier(0.22, 0.8, 0.24, 1);
+}
+
+.event-title {
+  font-family: "Marck Script", cursive;
+  font-size: clamp(28px, 7.2vw, 68px);
+  font-weight: 400;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.event-time {
+  margin-top: 0.35em;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(21px, 5.2vw, 48px);
+  font-weight: 500;
+  line-height: 1;
+}
+
+/* Точные места надписей */
+.event-1 {
+  top: 3.4%;
+  left: 38%;
+  width: 40%;
+}
+
+.event-2 {
+  top: 20.5%;
+  left: 31%;
+  width: 46%;
+}
+
+.event-3 {
+  top: 35.4%;
+  left: 34%;
+  width: 42%;
+}
+
+.event-4 {
+  top: 50.7%;
+  left: 30%;
+  width: 48%;
+}
+
+.event-5 {
+  top: 64.8%;
+  left: 32%;
+  width: 51%;
+}
+
+/* Направление появления */
+.timeline-event.enter-right {
+  transform: translateX(100px);
+}
+
+.timeline-event.enter-left {
+  transform: translateX(-100px);
+}
+
+/* Конечное положение */
+.timeline-event.timeline-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .timeline-event {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
   </style>
 </head>
 
@@ -649,7 +756,27 @@
     photoSections.forEach(function (section) {
       photoObserver.observe(section);
     });
+    const timelineEvents = document.querySelectorAll(".timeline-event");
+
+const timelineTextObserver = new IntersectionObserver(
+  (entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("timeline-visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  },
+  {
+    threshold: 0.35
+  }
+);
+
+timelineEvents.forEach((event) => {
+  timelineTextObserver.observe(event);
+});
   </script>
+
 
 </body>
 </html>
