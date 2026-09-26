@@ -97,6 +97,18 @@
       filter: blur(0);
       transform: translateY(0) scale(1);
     }
+    /* Foto4 появляется с правой стороны */
+.photo-section.from-right img {
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateX(120px) scale(0.97);
+}
+
+.photo-section.from-right.visible img {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateX(0) scale(1);
+}
 
     /* =========================
        НАЧАЛЬНОЕ ВИДЕО
@@ -324,6 +336,14 @@
         loading="lazy"
       >
     </section>
+    
+<section class="photo-section from-right">
+  <img
+    src="Foto4.PNG"
+    alt="Програма весільного дня"
+    loading="lazy"
+  >
+</section>
 
   </main>
 
@@ -350,9 +370,7 @@
 
   <!-- Фоновая музыка -->
   <audio id="backgroundMusic" loop preload="auto">
-    <source src="Музыка .mp3" type="audio/mpeg">
-  </audio>
-
+  <source src="Music%20.mp3" type="audio/mpeg">
   <!-- Включение и выключение музыки -->
   <button
     id="musicButton"
