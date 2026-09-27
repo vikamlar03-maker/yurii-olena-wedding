@@ -330,21 +330,7 @@
   vertical-align: top;
 }
 
-/* Foto4 не выезжает отдельным листом,
-   а цельно раскрывается справа */
-.photo-section.from-right img {
-  opacity: 1;
-  filter: none;
-  transform: none;
-  clip-path: inset(0 0 0 100%);
-  transition: clip-path 1.2s cubic-bezier(0.22, 0.8, 0.24, 1);
-}
 
-.photo-section.from-right.visible img {
-  opacity: 1;
-  filter: none;
-  transform: none;
-  clip-path: inset(0 0 0 0);
 }
 /* Расписание свадебного дня */
 .timeline-section {
@@ -499,8 +485,6 @@
     decoding="async"
     translate="no"
   >
-  >
-
   <div class="timeline-event event-1 enter-right">
     <div class="event-title">Вінчання</div>
     <div class="event-time">11:00</div>
