@@ -468,22 +468,101 @@
         alt="Yurii та Olena — третя фотографія"
         loading="lazy"
       >
-    </section>
-    
+  <style>
+  #timelineSection {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    line-height: normal;
+  }
+
+  #timelineSection .timeline-background {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+  }
+
+  #timelineSection .timeline-event {
+    position: absolute;
+    z-index: 5;
+    width: 46%;
+    text-align: center;
+    color: #4d5030;
+    opacity: 0;
+    transition:
+      opacity 1.1s ease,
+      transform 1.1s ease;
+  }
+
+  #timelineSection .enter-right {
+    transform: translateX(70px);
+  }
+
+  #timelineSection .enter-left {
+    transform: translateX(-70px);
+  }
+
+  #timelineSection .timeline-event.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  #timelineSection .event-title {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(30px, 7vw, 70px);
+    font-style: italic;
+    line-height: 1;
+  }
+
+  #timelineSection .event-time {
+    margin-top: 7px;
+    font-family: Georgia, serif;
+    font-size: clamp(22px, 5vw, 48px);
+  }
+
+  #timelineSection .event-1 {
+    top: 4%;
+    left: 43%;
+  }
+
+  #timelineSection .event-2 {
+    top: 21%;
+    left: 29%;
+  }
+
+  #timelineSection .event-3 {
+    top: 37%;
+    left: 35%;
+  }
+
+  #timelineSection .event-4 {
+    top: 53%;
+    left: 31%;
+  }
+
+  #timelineSection .event-5 {
+    top: 68%;
+    left: 34%;
+    width: 58%;
+  }
+</style>
+
 <section
-  class="timeline-section notranslate"
   id="timelineSection"
+  class="timeline-section notranslate"
   translate="no"
 >
   <img
-    src="Foto4.PNG?v=4"
+    src="Foto4.PNG?v=5"
     class="timeline-background"
     alt="Розклад весільного дня"
     width="941"
     height="1672"
     loading="eager"
     decoding="async"
-    translate="no"
   >
 
   <div class="timeline-event event-1 enter-right">
@@ -512,8 +591,28 @@
   </div>
 </section>
 
-  </main>
+<script>
+  const timelineEvents = document.querySelectorAll(
+    "#timelineSection .timeline-event"
+  );
 
+  const timelineObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+      });
+    },
+    {
+      threshold: 0.35
+    }
+  );
+
+  timelineEvents.forEach((event) => {
+    timelineObserver.observe(event);
+  });
+</script>
   <!-- Начальный экран с видео -->
   <section id="videoScreen">
 
