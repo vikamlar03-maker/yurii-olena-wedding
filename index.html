@@ -340,6 +340,16 @@
   padding: 0;
   overflow: hidden;
   line-height: normal;
+  opacity: 0;
+  transform: translateY(34px);
+  transition:
+    opacity 1.15s ease,
+    transform 1.35s cubic-bezier(0.22, 0.8, 0.24, 1);
+}
+
+.timeline-section.timeline-photo-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Сама фотография остаётся неподвижной */
@@ -431,6 +441,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .timeline-section,
   .timeline-event {
     opacity: 1;
     transform: none;
@@ -548,8 +559,13 @@
 
     <section class="photo-section visible">
       <img
-        src="Foto1.PNG"
+        src="Foto1.PNG?v=1"
         alt="Yurii та Olena — перша фотографія"
+        width="941"
+        height="1672"
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
       >
     </section>
 
@@ -557,7 +573,10 @@
       <img
         src="Foto2.PNG"
         alt="Yurii та Olena — друга фотографія"
+        width="941"
+        height="1672"
         loading="lazy"
+        decoding="async"
       >
     </section>
 
@@ -565,7 +584,10 @@
       <img
         src="Foto3.PNG"
         alt="Yurii та Olena — третя фотографія"
+        width="941"
+        height="1672"
         loading="lazy"
+        decoding="async"
       >
     </section>
     
@@ -580,8 +602,9 @@
     alt="Розклад весільного дня"
     width="941"
     height="1672"
-    loading="eager"
+    loading="lazy"
     decoding="async"
+    fetchpriority="low"
     translate="no"
   >
 
@@ -615,7 +638,10 @@
       <img
         src="Foto5.PNG?v=1"
         alt="Місце проведення — FECG Cloppenburg West"
+        width="941"
+        height="1672"
         loading="lazy"
+        decoding="async"
       >
 
       <a
@@ -668,17 +694,17 @@
         </figure>
       </div>
     </section>
-    </section>
 
     <section class="photo-section">
       <img
-        src="Foto6.PNG"
-        alt="Yurii та Olena — друга фотографія"
+        src="Foto6.PNG?v=1"
+        alt="Дрес-код весілля"
+        width="941"
+        height="1672"
         loading="lazy"
+        decoding="async"
       >
     </section>
-
-    
 
   </main>
 
@@ -925,9 +951,31 @@ const timelineTextObserver = new IntersectionObserver(
 timelineEvents.forEach((event) => {
   timelineTextObserver.observe(event);
 });
+
+/* Foto4 загружается и появляется только тогда,
+   когда пользователь доходит до расписания */
+const timelineSection = document.getElementById("timelineSection");
+
+if (timelineSection) {
+  const timelinePhotoObserver = new IntersectionObserver(
+    function (entries, observer) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("timeline-photo-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.12,
+      rootMargin: "0px 0px -8% 0px"
+    }
+  );
+
+  timelinePhotoObserver.observe(timelineSection);
+}
   </script>
 
 
 </body>
 </html>
-
