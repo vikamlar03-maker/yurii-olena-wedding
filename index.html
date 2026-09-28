@@ -562,6 +562,17 @@
     let screenMode = "video";
     let musicFadeTimer;
 
+    /* На iPhone Safari всегда начинаем с первой фотографии */
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+
+    window.scrollTo(0, 0);
+
+    window.addEventListener("pageshow", function () {
+      window.scrollTo(0, 0);
+    });
+
     /* Видео всегда без звука */
     video.muted = true;
     video.defaultMuted = true;
@@ -634,13 +645,15 @@
 
       startMusic();
 
-      window.scrollTo({
-        top: 0,
-        behavior: "instant"
+      window.scrollTo(0, 0);
+
+      requestAnimationFrame(function () {
+        window.scrollTo(0, 0);
       });
 
       setTimeout(function () {
         videoScreen.style.display = "none";
+        window.scrollTo(0, 0);
       }, 1500);
     }
 
