@@ -549,6 +549,268 @@
   outline-offset: -2px;
 }
 
+/* =========================
+   ТАЙМЕР И АНКЕТА ГОСТЯ
+========================= */
+
+.final-section {
+  width: 100%;
+  margin: -1px 0 0;
+  padding: 0 0 max(58px, calc(env(safe-area-inset-bottom) + 36px));
+  overflow: hidden;
+  color: #34402b;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.5), transparent 34%),
+    radial-gradient(circle at 86% 78%, rgba(211, 194, 151, 0.12), transparent 40%),
+    #f4efe7;
+  font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+}
+
+.countdown-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  min-height: 390px;
+  overflow: hidden;
+  background: #d9ddd8;
+}
+
+.countdown-photo {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+  filter: brightness(0.82) saturate(0.9);
+}
+
+.countdown-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(244, 239, 231, 0.22),
+    rgba(17, 31, 24, 0.18) 58%,
+    rgba(17, 31, 24, 0.42)
+  );
+}
+
+.countdown-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  padding: clamp(32px, 8vw, 74px) 5vw clamp(28px, 7vw, 62px);
+  color: #fffaf0;
+  text-align: center;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.42);
+}
+
+.countdown-title {
+  max-width: 900px;
+  margin: 0;
+  font-size: clamp(28px, 6.2vw, 62px);
+  font-weight: 500;
+  line-height: 1.08;
+}
+
+.countdown-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  width: min(94%, 820px);
+}
+
+.countdown-item {
+  position: relative;
+  padding: 0 2vw;
+}
+
+.countdown-item + .countdown-item {
+  border-left: 1px solid rgba(255, 250, 240, 0.68);
+}
+
+.countdown-number {
+  display: block;
+  font-size: clamp(32px, 9vw, 80px);
+  font-variant-numeric: tabular-nums;
+  line-height: 0.95;
+}
+
+.countdown-label {
+  display: block;
+  margin-top: 0.55em;
+  font-size: clamp(12px, 3vw, 24px);
+  letter-spacing: 0.06em;
+}
+
+.rsvp-wrap {
+  width: min(92%, 760px);
+  margin: 0 auto;
+  padding: clamp(52px, 12vw, 110px) 0 0;
+}
+
+.rsvp-title,
+.telegram-title {
+  margin: 0;
+  color: #34402b;
+  font-size: clamp(42px, 10vw, 84px);
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+}
+
+.rsvp-form {
+  margin-top: clamp(30px, 7vw, 58px);
+  padding: clamp(28px, 7vw, 60px) clamp(22px, 6vw, 54px);
+  border: 1px solid rgba(70, 82, 53, 0.16);
+  border-radius: clamp(28px, 7vw, 54px);
+  background: rgba(255, 253, 247, 0.7);
+  box-shadow: 0 18px 50px rgba(45, 58, 42, 0.08);
+}
+
+.rsvp-field {
+  width: 100%;
+  min-height: 64px;
+  padding: 14px 24px;
+  border: 1.5px solid rgba(59, 72, 47, 0.36);
+  border-radius: 999px;
+  outline: none;
+  color: #34402b;
+  background: rgba(255, 255, 255, 0.66);
+  font: inherit;
+  font-size: clamp(21px, 5vw, 34px);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.rsvp-field::placeholder {
+  color: rgba(52, 64, 43, 0.48);
+}
+
+.rsvp-field:focus {
+  border-color: #52623f;
+  box-shadow: 0 0 0 4px rgba(82, 98, 63, 0.1);
+}
+
+.attendance-fieldset {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(28px, 10vw, 82px);
+  margin: clamp(28px, 7vw, 48px) 0;
+  padding: 0;
+  border: 0;
+}
+
+.attendance-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: #34402b;
+  font-size: clamp(25px, 6vw, 42px);
+  cursor: pointer;
+}
+
+.attendance-option input {
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  accent-color: #34402b;
+}
+
+.rsvp-submit {
+  display: block;
+  min-width: min(78%, 360px);
+  min-height: 62px;
+  margin: clamp(28px, 7vw, 48px) auto 0;
+  padding: 15px 30px;
+  border: 0;
+  border-radius: 999px;
+  color: #fffaf0;
+  background: #314738;
+  font: inherit;
+  font-size: clamp(23px, 5.6vw, 38px);
+  font-weight: 600;
+  box-shadow: 0 12px 28px rgba(49, 71, 56, 0.22);
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.rsvp-submit:active {
+  transform: scale(0.98);
+}
+
+.rsvp-submit:disabled {
+  cursor: wait;
+  opacity: 0.62;
+}
+
+.rsvp-status {
+  min-height: 1.4em;
+  margin: 22px 0 0;
+  color: #52623f;
+  font-size: clamp(18px, 4.4vw, 28px);
+  line-height: 1.25;
+  text-align: center;
+}
+
+.rsvp-success {
+  margin-top: clamp(30px, 7vw, 58px);
+  padding: clamp(42px, 10vw, 86px) 24px;
+  border: 1px solid rgba(70, 82, 53, 0.16);
+  border-radius: clamp(28px, 7vw, 54px);
+  color: #34402b;
+  background: rgba(255, 253, 247, 0.72);
+  font-size: clamp(34px, 8vw, 68px);
+  text-align: center;
+}
+
+.rsvp-success[hidden],
+.honeypot-field {
+  display: none;
+}
+
+.telegram-group {
+  padding: clamp(58px, 13vw, 120px) 5vw 0;
+  text-align: center;
+}
+
+.telegram-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 58px;
+  margin-top: clamp(24px, 6vw, 46px);
+  padding: 13px 30px;
+  border: 1px solid rgba(52, 64, 43, 0.36);
+  border-radius: 999px;
+  color: #34402b;
+  background: rgba(255, 253, 247, 0.6);
+  font-size: clamp(22px, 5.3vw, 36px);
+  text-decoration: none;
+  box-shadow: 0 12px 28px rgba(45, 58, 42, 0.08);
+}
+
+@media (max-width: 430px) {
+  .countdown-card {
+    min-height: 360px;
+  }
+
+  .countdown-content {
+    padding-inline: 3vw;
+  }
+
+  .countdown-item {
+    padding-inline: 1.5vw;
+  }
+}
+
   </style>
 </head>
 
@@ -704,6 +966,116 @@
         loading="lazy"
         decoding="async"
       >
+    </section>
+
+    <section class="final-section" aria-label="Таймер та анкета гостя">
+      <div class="countdown-card">
+        <img
+          class="countdown-photo"
+          src="Timing.jpg?v=1"
+          alt="Yurii та Olena"
+          loading="lazy"
+          decoding="async"
+        >
+
+        <div class="countdown-content">
+          <h2 class="countdown-title">
+            До того, як ми станемо сім’єю, залишилось…
+          </h2>
+
+          <div class="countdown-grid" aria-label="Зворотний відлік до весілля">
+            <div class="countdown-item">
+              <span class="countdown-number" id="countdownDays">0</span>
+              <span class="countdown-label">днів</span>
+            </div>
+            <div class="countdown-item">
+              <span class="countdown-number" id="countdownHours">00</span>
+              <span class="countdown-label">годин</span>
+            </div>
+            <div class="countdown-item">
+              <span class="countdown-number" id="countdownMinutes">00</span>
+              <span class="countdown-label">хвилин</span>
+            </div>
+            <div class="countdown-item">
+              <span class="countdown-number" id="countdownSeconds">00</span>
+              <span class="countdown-label">секунд</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rsvp-wrap">
+        <h2 class="rsvp-title">Анкета гостя</h2>
+
+        <form class="rsvp-form" id="rsvpForm">
+          <label>
+            <span class="honeypot-field">Не заповнюйте це поле</span>
+            <input
+              class="rsvp-field"
+              id="guestName"
+              name="name"
+              type="text"
+              autocomplete="name"
+              placeholder="Ім’я"
+              maxlength="80"
+              required
+            >
+          </label>
+
+          <fieldset class="attendance-fieldset">
+            <legend class="honeypot-field">Чи будете ви присутні?</legend>
+            <label class="attendance-option">
+              <input type="radio" name="attendance" value="Так" required>
+              <span>Так</span>
+            </label>
+            <label class="attendance-option">
+              <input type="radio" name="attendance" value="Ні" required>
+              <span>Ні</span>
+            </label>
+          </fieldset>
+
+          <label>
+            <span class="honeypot-field">Кількість гостей</span>
+            <input
+              class="rsvp-field"
+              id="guestCount"
+              name="guests"
+              type="number"
+              inputmode="numeric"
+              placeholder="Кількість"
+              min="1"
+              max="10"
+            >
+          </label>
+
+          <label class="honeypot-field" aria-hidden="true">
+            Website
+            <input name="website" type="text" tabindex="-1" autocomplete="off">
+          </label>
+
+          <button class="rsvp-submit" id="rsvpSubmit" type="submit">
+            Відправити
+          </button>
+
+          <p class="rsvp-status" id="rsvpStatus" role="status" aria-live="polite"></p>
+        </form>
+
+        <div class="rsvp-success" id="rsvpSuccess" hidden>
+          Дякую за відповідь 🤍
+        </div>
+      </div>
+
+      <div class="telegram-group">
+        <h2 class="telegram-title">Загальна група</h2>
+        <a
+          class="telegram-link"
+          href="https://t.me/+JjKskWTCQMw4N2Uy"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Перейти в Telegram
+        </a>
+      </div>
     </section>
 
   </main>
@@ -974,6 +1346,108 @@ if (timelineSection) {
 
   timelinePhotoObserver.observe(timelineSection);
 }
+
+/* Зворотний відлік до весілля — 28 листопада 2026, 11:00 у Німеччині */
+const weddingDate = new Date("2026-11-28T11:00:00+01:00").getTime();
+const countdownDays = document.getElementById("countdownDays");
+const countdownHours = document.getElementById("countdownHours");
+const countdownMinutes = document.getElementById("countdownMinutes");
+const countdownSeconds = document.getElementById("countdownSeconds");
+
+function updateCountdown() {
+  const remaining = Math.max(0, weddingDate - Date.now());
+  const day = 24 * 60 * 60 * 1000;
+  const hour = 60 * 60 * 1000;
+  const minute = 60 * 1000;
+
+  countdownDays.textContent = Math.floor(remaining / day);
+  countdownHours.textContent = String(
+    Math.floor((remaining % day) / hour)
+  ).padStart(2, "0");
+  countdownMinutes.textContent = String(
+    Math.floor((remaining % hour) / minute)
+  ).padStart(2, "0");
+  countdownSeconds.textContent = String(
+    Math.floor((remaining % minute) / 1000)
+  ).padStart(2, "0");
+}
+
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+/*
+  Сюди потрібно вставити лише адресу Cloudflare Worker.
+  Токен Telegram-бота не можна вставляти в цей публічний файл.
+*/
+const RSVP_ENDPOINT = "PASTE_YOUR_CLOUDFLARE_WORKER_URL_HERE";
+const rsvpForm = document.getElementById("rsvpForm");
+const rsvpSubmit = document.getElementById("rsvpSubmit");
+const rsvpStatus = document.getElementById("rsvpStatus");
+const rsvpSuccess = document.getElementById("rsvpSuccess");
+const guestCount = document.getElementById("guestCount");
+const attendanceInputs = document.querySelectorAll(
+  'input[name="attendance"]'
+);
+
+attendanceInputs.forEach(function (input) {
+  input.addEventListener("change", function () {
+    const isComing = input.value === "Так";
+    guestCount.disabled = !isComing;
+    guestCount.required = isComing;
+
+    if (!isComing) {
+      guestCount.value = "";
+    }
+  });
+});
+
+rsvpForm.addEventListener("submit", async function (event) {
+  event.preventDefault();
+
+  const formData = new FormData(rsvpForm);
+
+  if (formData.get("website")) {
+    return;
+  }
+
+  if (RSVP_ENDPOINT.includes("PASTE_YOUR_")) {
+    rsvpStatus.textContent =
+      "Анкету ще не підключено до Telegram. Додайте адресу Worker у коді.";
+    return;
+  }
+
+  const attendance = formData.get("attendance");
+  const payload = {
+    name: String(formData.get("name") || "").trim(),
+    attendance: attendance,
+    guests: attendance === "Так" ? Number(formData.get("guests")) : 0,
+    website: ""
+  };
+
+  rsvpSubmit.disabled = true;
+  rsvpStatus.textContent = "Надсилаємо…";
+
+  try {
+    const response = await fetch(RSVP_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error("Telegram request failed");
+    }
+
+    rsvpForm.hidden = true;
+    rsvpSuccess.hidden = false;
+  } catch (error) {
+    rsvpStatus.textContent =
+      "Не вдалося надіслати відповідь. Спробуйте ще раз.";
+    rsvpSubmit.disabled = false;
+  }
+});
   </script>
 
 
