@@ -437,6 +437,46 @@
     transition: none;
   }
 }
+
+/* Кнопка Google Maps на Foto5 */
+.location-section {
+  position: relative;
+}
+
+.location-link {
+  position: absolute;
+  left: 22.8%;
+  top: 70%;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 54.4%;
+  height: 6.8%;
+  padding: 0 3%;
+  border-radius: 999px;
+  color: #3f4727;
+  background: rgba(250, 247, 239, 0.5);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(14px, 3.7vw, 34px);
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+  text-align: center;
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 1s ease 0.35s, transform 1s ease 0.35s, background 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.location-section.visible .location-link {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.location-link:active {
+  background: rgba(231, 221, 194, 0.82);
+}
   </style>
 </head>
 
@@ -509,6 +549,24 @@
     <div class="event-time">19:00</div>
   </div>
 </section>
+
+    <section class="photo-section location-section">
+      <img
+        src="Foto5.PNG?v=1"
+        alt="Місце проведення — FECG Cloppenburg West"
+        loading="lazy"
+      >
+
+      <a
+        class="location-link"
+        href="https://www.google.com/maps/search/?api=1&amp;query=FECG%20Cloppenburg%20West%2C%20Huntestra%C3%9Fe%2039%2C%2049661%20Cloppenburg"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Відкрити місце проведення в Google Maps"
+      >
+        Відкрити в Google Maps
+      </a>
+    </section>
 
   </main>
 
