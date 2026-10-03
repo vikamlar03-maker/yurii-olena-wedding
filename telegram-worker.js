@@ -2,8 +2,9 @@
   Cloudflare Worker для безпечного надсилання анкети в Telegram.
 
   У Cloudflare Worker відкрийте Settings -> Variables and Secrets та додайте:
-  TELEGRAM_BOT_TOKEN — токен, який видасть BotFather
-  TELEGRAM_CHAT_ID   — ID вашого чату або групи
+  TELEGRAM_BOT_TOKEN — 8720804368: AAEB5HLGK9Xpo2UzK
+bWxOFtSakT_Jbc8gHw
+  TELEGRAM_CHAT_ID   — 7275676544
   ALLOWED_ORIGIN     — https://vikamlar03-maker.github.io
 
   Токен не потрібно і не можна додавати в index.html або в GitHub.
