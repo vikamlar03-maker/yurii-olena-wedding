@@ -1375,81 +1375,95 @@ function updateCountdown() {
 updateCountdown();
 setInterval(updateCountdown, 1000);
 
-/*
-  Сюди потрібно вставити лише адресу Cloudflare Worker.
-  Токен Telegram-бота не можна вставляти в цей публічний файл.
-*/
-const RSVP_ENDPOINT = "https://wedding-rsvp.vikamlar.workers.dev";
-const rsvpForm = document.getElementById("rsvpForm");
-const rsvpSubmit = document.getElementById("rsvpSubmit");
-const rsvpStatus = document.getElementById("rsvpStatus");
-const rsvpSuccess = document.getElementById("rsvpSuccess");
-const guestCount = document.getElementById("guestCount");
-const attendanceInputs = document.querySelectorAll(
-  'input[name="attendance"]'
-);
+=========================
+     АНКЕТА → TELEGRAM
+  ========================= */
 
-attendanceInputs.forEach(function (input) {
-  input.addEventListener("change", function () {
-    const isComing = input.value === "Так";
-    guestCount.disabled = !isComing;
-    guestCount.required = isComing;
+  const guestForm = document.getElementById("guestForm");
+  const thankYouMessage =
+    document.getElementById("thankYouMessage");
 
-    if (!isComing) {
-      guestCount.value = "";
-    }
-  });
-});
+  if (guestForm) {
 
-rsvpForm.addEventListener("submit", async function (event) {
-  event.preventDefault();
+    guestForm.addEventListener("submit", async function (event) {
 
-  const formData = new FormData(rsvpForm);
+      event.preventDefault();
 
-  if (formData.get("website")) {
-    return;
-  }
+      const BOT_TOKEN = "8684460858:AAEHxRVJf_2BkF2a538Np5eL4HkZDBpZkTc";
+      const CHAT_ID = "1808023543";
 
-  if (RSVP_ENDPOINT.includes("PASTE_YOUR_")) {
-    rsvpStatus.textContent =
-      "Анкету ще не підключено до Telegram. Додайте адресу Worker у коді.";
-    return;
-  }
+      const name =
+        document.getElementById("guestName").value.trim();
 
-  const attendance = formData.get("attendance");
-  const payload = {
-    name: String(formData.get("name") || "").trim(),
-    attendance: attendance,
-    guests: attendance === "Так" ? Number(formData.get("guests")) : 0,
-    website: ""
-  };
+      const attendanceInput =
+        document.querySelector(
+          'input[name="attendance"]:checked'
+        );
 
-  rsvpSubmit.disabled = true;
-  rsvpStatus.textContent = "Надсилаємо…";
+      const attendance = attendanceInput
+        ? attendanceInput.value
+        : "Не вказано";
 
-  try {
-    const response = await fetch(RSVP_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
+      const guestCountElement =
+        document.getElementById("guestCount");
+
+      const count =
+        guestCountElement && guestCountElement.value
+          ? guestCountElement.value
+          : "Не вказано";
+
+      const message = `💍 Нова відповідь на весільну анкету
+
+👤 Ім’я: ${name}
+💌 Присутність: ${attendance}
+👥 Кількість гостей: ${count}`;
+
+      const url =
+        "https://api.telegram.org/bot" +
+        BOT_TOKEN +
+        "/sendMessage";
+
+      try {
+
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text: message
+          })
+        });
+
+        const result = await response.json();
+
+        if (!result.ok) {
+          throw new Error(
+            result.description || "Telegram error"
+          );
+        }
+
+        guestForm.style.display = "none";
+
+        if (thankYouMessage) {
+          thankYouMessage.hidden = false;
+        }
+
+      } catch (error) {
+
+        console.error(error);
+
+        alert(
+          "Помилка Telegram: " + error.message
+        );
+
+      }
+
     });
-
-    if (!response.ok) {
-      throw new Error("Telegram request failed");
-    }
-
-    rsvpForm.hidden = true;
-    rsvpSuccess.hidden = false;
-  } catch (error) {
-    rsvpStatus.textContent =
-      "Не вдалося надіслати відповідь. Спробуйте ще раз.";
-    rsvpSubmit.disabled = false;
   }
+
 });
-  </script>
-
-
+</script>
 </body>
 </html>
