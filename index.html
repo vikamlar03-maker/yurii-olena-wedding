@@ -1375,94 +1375,69 @@ function updateCountdown() {
 updateCountdown();
 setInterval(updateCountdown, 1000);
 
-=========================
-     АНКЕТА → TELEGRAM
-  ========================= */
+/* =========================
+   АНКЕТА → GOOGLE FORMS / GOOGLE ТАБЛИЦІ
+   ========================= */
+const RSVP_ENDPOINT =
+  "https://docs.google.com/forms/d/e/1FAIpQLSdxxcJIoV43wx6B2h9f4Y4NDl6ilsqNppfMg-uCy7H2rvoWKA/formResponse";
+const GOOGLE_FORM_FIELDS = {
+  name: "entry.458091303",
+  attendance: "entry.886721052",
+  guests: "entry.1789460694"
+};
+const rsvpForm = document.getElementById("rsvpForm");
+const rsvpSubmit = document.getElementById("rsvpSubmit");
+const rsvpStatus = document.getElementById("rsvpStatus");
+const rsvpSuccess = document.getElementById("rsvpSuccess");
+const guestCount = document.getElementById("guestCount");
+const attendanceInputs = document.querySelectorAll(
+  'input[name="attendance"]'
+);
 
-  const guestForm = document.getElementById("guestForm");
-  const thankYouMessage =
-    document.getElementById("thankYouMessage");
+attendanceInputs.forEach(function (input) {
+  input.addEventListener("change", function () {
+    const isComing = input.value === "Так";
+    guestCount.disabled = !isComing;
+    guestCount.required = isComing;
+    if (!isComing) guestCount.value = "";
+  });
+});
 
-  if (guestForm) {
+rsvpForm.addEventListener("submit", async function (event) {
+  event.preventDefault();
 
-    guestForm.addEventListener("submit", async function (event) {
+  const formData = new FormData(rsvpForm);
+  if (formData.get("website")) return;
 
-      event.preventDefault();
+  const attendance = formData.get("attendance");
+  const payload = new URLSearchParams();
+  payload.set(
+    GOOGLE_FORM_FIELDS.name,
+    String(formData.get("name") || "").trim()
+  );
+  payload.set(GOOGLE_FORM_FIELDS.attendance, String(attendance || ""));
+  payload.set(
+    GOOGLE_FORM_FIELDS.guests,
+    attendance === "Так" ? String(formData.get("guests") || "") : "0"
+  );
 
-      const BOT_TOKEN = "8907923436:AAGq0iTQj2gllqlMjOMWBIaPnLEKyYp35Bw";
-      const CHAT_ID = "1808023543";
+  rsvpSubmit.disabled = true;
+  rsvpStatus.textContent = "Надсилаємо…";
 
-      const name =
-        document.getElementById("guestName").value.trim();
-
-      const attendanceInput =
-        document.querySelector(
-          'input[name="attendance"]:checked'
-        );
-
-      const attendance = attendanceInput
-        ? attendanceInput.value
-        : "Не вказано";
-
-      const guestCountElement =
-        document.getElementById("guestCount");
-
-      const count =
-        guestCountElement && guestCountElement.value
-          ? guestCountElement.value
-          : "Не вказано";
-
-      const message = `💍 Нова відповідь на весільну анкету
-
-👤 Ім’я: ${name}
-💌 Присутність: ${attendance}
-👥 Кількість гостей: ${count}`;
-
-      const url =
-        "https://api.telegram.org/bot" +
-        BOT_TOKEN +
-        "/sendMessage";
-
-      try {
-
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            chat_id: CHAT_ID,
-            text: message
-          })
-        });
-
-        const result = await response.json();
-
-        if (!result.ok) {
-          throw new Error(
-            result.description || "Telegram error"
-          );
-        }
-
-        guestForm.style.display = "none";
-
-        if (thankYouMessage) {
-          thankYouMessage.hidden = false;
-        }
-
-      } catch (error) {
-
-        console.error(error);
-
-        alert(
-          "Помилка Telegram: " + error.message
-        );
-
-      }
-
+  try {
+    await fetch(RSVP_ENDPOINT, {
+      method: "POST",
+      mode: "no-cors",
+      body: payload
     });
-  }
 
+    rsvpForm.hidden = true;
+    rsvpSuccess.hidden = false;
+  } catch (error) {
+    rsvpStatus.textContent =
+      "Не вдалося надіслати відповідь. Спробуйте ще раз.";
+    rsvpSubmit.disabled = false;
+  }
 });
 </script>
 </body>
